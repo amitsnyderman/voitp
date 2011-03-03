@@ -1,0 +1,41 @@
+[au319_midterm]
+exten => s,1,Answer()
+exten => s,n,NoOp(${TIMESTAMP})
+exten => s,n,Wait(1)
+exten => s,n,Background(/home/au319/asterisk_sounds/call_intro) ; plays intro for everyone
+exten => 1,1,Playback(/home/au319/asterisk_sounds/pcomp_intro) ; if user presses 1, play pcomp
+exten => 1,n,Goto(au319_pcomp,s,1)
+exten => 2,1,Background(/home/au319/asterisk_sounds/code_intro)
+exten => 2,n,Goto(au319_code,s,1)
+exten => 3,1,Playback(/home/au319/asterisk_sounds/thesis_intro)
+exten => 3,n,Goto(au319_thesis,s,1)
+
+[au319_pcomp]
+exten => s,1,Dial(${Expert},10) ;just a placeholder for calling the expert
+exten => 1,n,Playback(/home/au319/asterisk_sounds/call_concludes) ;call ending
+exten => s,n,Hangup(${DIALEDTIME},60) ; i "think" this is how you hang up after 30 seconds
+
+[au319_code]
+exten => s,1,Wait(1);
+exten => 1,n,Playback(/home/au319/asterisk_sounds/code_processing)
+exten => 1,n,Dial(${Expert},10)
+exten => 1,n,Playback(/home/au319/asterisk_sounds/call_nobody)
+exten => 1,n,Playback(/home/au319/asterisk_sounds/call_concludes)
+exten => 1,n,Hangup()
+
+exten => 2,1,Playback(/home/au319/asterisk_sounds/code_html)
+exten => 2,n,Dial(${Expert},10)
+exten => 2,n,Playback(/home/au319/asterisk_sounds/call_nobody)
+exten => 2,n,Playback(/home/au319/asterisk_sounds/call_concludes)
+exten => 2,n,Hangup()
+
+exten => 3,1,Playback(/home/au319/asterisk_sounds/code_python)
+exten => 3,n,Dial(${Expert},10)
+exten => 3,n,Playback(/home/au319/asterisk_sounds/call_nobody)
+exten => 3,n,Playback(/home/au319/asterisk_sounds/call_concludes)
+exten => 3,n,Hangup()
+
+[au319_thesis]
+exten => _X,1,Dial(${Expert},10);
+exten => _X,n,Playback(/home/au319/asterisk_sounds/call_concludes)
+exten => _X,n,Hangup()
