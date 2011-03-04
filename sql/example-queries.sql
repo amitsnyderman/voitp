@@ -6,6 +6,15 @@ INNER JOIN experts_specialties es
 ON e.id = es.expert_id
 AND es.specialty_id = 3
 
+SELECT DISTINCT(e.phone_number)
+FROM experts e
+INNER JOIN experts_specialties es
+ON e.id = es.expert_id
+JOIN specialties s
+ON es.specialty_id = s.id
+AND s.context = 'au319_code'
+AND s.extension = '2'
+
 -- Find all users who are available on Tuesday
 
 SELECT DISTINCT(e.phone_number)
