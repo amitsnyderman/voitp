@@ -40,3 +40,14 @@ FROM specialties s
 LEFT JOIN topics t
 ON s.topic_id = t.id
 ORDER BY topic_name, specialty_name
+
+-- Find all specialties and identify those for a specific expert
+
+SELECT s.id, s.name, t.name, IF(es.expert_id IS NOT NULL, TRUE, FALSE) AS checked
+FROM specialties s
+LEFT JOIN topics t
+ON s.topic_id = t.id
+LEFT JOIN experts_specialties es
+ON s.id = es.specialty_id
+AND es.expert_id = 1
+ORDER BY t.name, s.name
