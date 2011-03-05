@@ -51,3 +51,25 @@ LEFT JOIN experts_specialties es
 ON s.id = es.specialty_id
 AND es.expert_id = 1
 ORDER BY t.name, s.name
+
+-- Find expert ID and phone number matching the criteria:
+-- Has specialty matching: context = au319_code, extension = 2
+-- Available now
+-- Called least recently
+
+SELECT DISTINCT(e.id), e.phone_number
+FROM experts e
+INNER JOIN experts_specialties es
+	ON e.id = es.expert_id
+INNER JOIN specialties s
+	ON es.specialty_id = s.id
+	AND s.context = 'au319_code'
+	AND s.extension = '2'
+INNER JOIN availability a
+	ON e.id = a.expert_id
+	AND a.day IN (DAYOFWEEK(CURRENT_DATE()))
+	AND ((CURTIME() BETWEEN a.from AND a.through) OR a.allday = TRUE)
+LEFT JOIN calls c
+	ON e.id = c.expert_id
+ORDER BY c.created_on ASC
+LIMIT 1

@@ -29,6 +29,8 @@ CREATE TABLE `specialties` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `topic_id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
+  `context` varchar(50) NOT NULL,
+  `extension` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `topic_id` (`topic_id`),
   CONSTRAINT `specialties_ibfk_1` FOREIGN KEY (`topic_id`) REFERENCES `topics` (`id`)
@@ -76,20 +78,18 @@ INSERT INTO `topics` (`id`,`name`)
 VALUES
 	(1,'Physical Computing'),
 	(2,'Programming'),
-	(3,'Interactive Design');
+	(3,'Thesis');
 
-INSERT INTO `specialties` (`id`,`topic_id`,`name`)
+INSERT INTO `specialties` (`id`,`topic_id`,`name`,`context`,`extension`)
 VALUES
-	(1,2,'Python'),
-	(2,2,'JavaScript'),
-	(3,2,'Ruby'),
-	(4,2,'Processing'),
-	(5,2,'HTML/CSS'),
-	(6,1,'Arduino'),
-	(7,1,'Soldering'),
-	(8,3,'Photoshop'),
-	(9,3,'Final Cut Pro'),
-	(10,3,'Illustrator');
+	(1,2,'Python','au319_code',3),
+	(2,2,'JavaScript','au319_code',2),
+	(3,2,'Ruby','au319_code',3),
+	(4,2,'Processing','au319_code',1),
+	(5,2,'HTML/CSS','au319_code',2),
+	(6,1,'Arduino','au319_pcomp',1),
+	(7,1,'Soldering','au319_pcomp',1),
+	(8,3,'Thesis','au319_thesis',1);
 
 INSERT INTO `experts_specialties` (`id`,`expert_id`,`specialty_id`)
 VALUES
@@ -97,6 +97,5 @@ VALUES
 	(2,1,3),
 	(3,1,5),
 	(4,1,8),
-	(5,1,10),
-	(6,2,1),
-	(7,2,4);
+	(5,2,1),
+	(6,2,4);
