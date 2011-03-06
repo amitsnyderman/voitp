@@ -35,16 +35,15 @@ $sql =<<<SQL
 	LEFT JOIN calls c
 		ON e.id = c.expert_id
 	ORDER BY c.created_on ASC
-	LIMIT %s,1
+	LIMIT %d,1
 SQL;
 
 $sql = sprintf(
 	$sql,
 	mysql_real_escape_string($context),
 	mysql_real_escape_string($extension),
-	mysql_real_escape_string($offset)
+	$offset
 );
-
 
 // Get the expert's #
 // We're not storing the leading 1 so prepend it
@@ -52,10 +51,6 @@ $sql = sprintf(
 $result = mysql_query($sql, $db);
 $row = mysql_fetch_assoc($result);
 
-if ($row['phone_number']) {
-	printf('1%s', $row['phone_number']);
-} else {
-	echo '';
-}
+echo $row['phone_number'];
 
 ?>
