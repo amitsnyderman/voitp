@@ -1,14 +1,11 @@
 #!/usr/bin/php -q
 <?php
 
-require('/var/lib/asterisk/agi-bin/phpagi.php');
-
-$agi = new AGI();
 
 // Collect call information
 
-$context = $agi->request['agi_context'];
-$extension = $agi->request['agi_extension'];
+$context = $argv[1];
+$extension = $argv[2];
 
 // TODO Establish DB connection
 
@@ -40,10 +37,10 @@ SQL;
 
 // TODO Execute SQL query to get expert
 
-$phone_number = '12125551212';
+$phone_number = '12069471415';
 
 // Initiate call
 
-$agi->exec_dial('SIP', "itp_jnctn/$phone_number", null, 10);
+echo $phone_number;
 
 ?>
