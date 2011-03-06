@@ -1,10 +1,11 @@
 CREATE TABLE `experts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `phone_number` int(10) NOT NULL,
+  `phone_number` varchar(10) NOT NULL,
   `first_name` varchar(30) CHARACTER SET latin1 DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
   `created_on` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unq_phone_number` (`phone_number`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `availability` (

@@ -1,13 +1,17 @@
 #!/usr/bin/php -q
 <?php
 
+if (count($argv) != 3) {
+	print "Usage: % dial-expert.php context extension\n";
+	exit(1);
+}
+
+require_once(dirname(__FILE__).'/../lib/config.php');
+require_once(dirname(__FILE__).'/../lib/db.php');
 
 // Collect call information
 
-$context = $argv[1];
-$extension = $argv[2];
-
-// TODO Establish DB connection
+list($context, $extension) = array_slice($argv, 1);
 
 // Build SQL query
 // Select expert with following criteria
@@ -16,14 +20,14 @@ $extension = $argv[2];
 // * Least recently called of those experts
 
 $sql =<<<SQL
-	SELECT DISTINCT(e.id), e.phone_number
+	SELECT DISTINCT(e.phone_number)
 	FROM experts e
 	INNER JOIN experts_specialties es
 		ON e.id = es.expert_id
 	INNER JOIN specialties s
 		ON es.specialty_id = s.id
-		AND s.context = '$context'
-		AND s.extension = '$extension'
+		AND s.context = '%s'
+		AND s.extension = '%s'
 	INNER JOIN availability a
 		ON e.id = a.expert_id
 		AND a.day IN (DAYOFWEEK(CURRENT_DATE()))
@@ -34,13 +38,18 @@ $sql =<<<SQL
 	LIMIT 1
 SQL;
 
+$sql = sprintf(
+	$sql,
+	mysql_real_escape_string($context),
+	mysql_real_escape_string($extension)
+);
 
-// TODO Execute SQL query to get expert
 
-$phone_number = '12069471415';
+// Get the expert's #
 
-// Initiate call
+$result = mysql_query($sql, $db);
+$row = mysql_fetch_assoc($result);
 
-echo $phone_number;
+echo $row['phone_number'];
 
 ?>

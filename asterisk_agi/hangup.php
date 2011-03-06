@@ -1,21 +1,36 @@
 #!/usr/bin/php -q
 <?php
 
-require('/var/lib/asterisk/agi-bin/phpagi.php');
+if (count($argv) != 4) {
+	print "Usage: % hangup.php phone_number expert_number duration\n";
+	exit(1);
+}
 
-$agi = new AGI();
+require_once(dirname(__FILE__).'/../lib/config.php');
+require_once(dirname(__FILE__).'/../lib/db.php');
 
 // Collect call information
 
-$phone_number = $agi->request['agi_callerid'];
-$call_duration = $agi->request['agi_arg_1'];
+list($phone_number, $expert_number, $call_duration) = array_slice($argv, 1);
 
-// TODO Establish DB connection
+// Build and execute SQL query
 
-// Build SQL query
+$sql =<<<SQL
+	INSERT INTO `calls` (`expert_id`,`phone_number`,`call_duration`,`created_on`)
+	VALUES ((
+		SELECT id
+		FROM experts
+		WHERE phone_number = '%s'
+	),'%s','%s',NOW())
+SQL;
 
-$sql = "INSERT INTO `calls` (`expert_id`,`phone_number`,`call_duration`,`created_on`) VALUES ('1','$phone_number','$call_duration',NOW())";
+$sql = sprintf(
+	$sql,
+	mysql_real_escape_string($expert_number),
+	mysql_real_escape_string($phone_number),
+	mysql_real_escape_string($call_duration)
+);
 
-// TODO Execute SQL query to insert row
+mysql_query($sql, $db);
 
 ?>
