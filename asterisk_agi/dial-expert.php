@@ -1,8 +1,8 @@
 #!/usr/bin/php -q
 <?php
 
-if (count($argv) != 3) {
-	print "Usage: % dial-expert.php context extension\n";
+if (count($argv) != 4) {
+	print "Usage: % dial-expert.php context extension offset\n";
 	exit(1);
 }
 
@@ -11,7 +11,7 @@ require_once(dirname(__FILE__).'/../lib/db.php');
 
 // Collect call information
 
-list($context, $extension) = array_slice($argv, 1);
+list($context, $extension, $offset) = array_slice($argv, 1);
 
 // Build SQL query
 // Select expert with following criteria
@@ -35,21 +35,27 @@ $sql =<<<SQL
 	LEFT JOIN calls c
 		ON e.id = c.expert_id
 	ORDER BY c.created_on ASC
-	LIMIT 1
+	LIMIT %s,1
 SQL;
 
 $sql = sprintf(
 	$sql,
 	mysql_real_escape_string($context),
-	mysql_real_escape_string($extension)
+	mysql_real_escape_string($extension),
+	mysql_real_escape_string($offset)
 );
 
 
 // Get the expert's #
+// We're not storing the leading 1 so prepend it
 
 $result = mysql_query($sql, $db);
 $row = mysql_fetch_assoc($result);
 
-echo $row['phone_number'];
+if ($row['phone_number']) {
+	printf('1%s', $row['phone_number']);
+} else {
+	echo '';
+}
 
 ?>

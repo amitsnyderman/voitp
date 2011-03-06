@@ -63,7 +63,7 @@ CREATE TABLE `calls` (
 INSERT INTO `experts` (`id`,`phone_number`,`first_name`,`last_name`,`created_on`)
 VALUES
 	(1,'6466443604','Amit','Snyderman','2011-02-28 18:00:00'),
-	(2,'2125551212','Aaron','Uhrmacher','2011-02-28 18:00:00');
+	(2,'2069471415','Aaron','Uhrmacher','2011-02-28 18:00:00');
 
 INSERT INTO `availability` (`id`,`expert_id`,`day`,`from`,`through`,`allday`)
 VALUES
