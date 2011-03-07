@@ -1,10 +1,11 @@
 CREATE TABLE `experts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `phone_number` int(10) NOT NULL,
+  `phone_number` varchar(10) NOT NULL,
   `first_name` varchar(30) CHARACTER SET latin1 DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
   `created_on` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unq_phone_number` (`phone_number`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `availability` (
@@ -62,7 +63,7 @@ CREATE TABLE `calls` (
 INSERT INTO `experts` (`id`,`phone_number`,`first_name`,`last_name`,`created_on`)
 VALUES
 	(1,'6466443604','Amit','Snyderman','2011-02-28 18:00:00'),
-	(2,'2125551212','Aaron','Uhrmacher','2011-02-28 18:00:00');
+	(2,'2069471415','Aaron','Uhrmacher','2011-02-28 18:00:00');
 
 INSERT INTO `availability` (`id`,`expert_id`,`day`,`from`,`through`,`allday`)
 VALUES
@@ -82,14 +83,14 @@ VALUES
 
 INSERT INTO `specialties` (`id`,`topic_id`,`name`,`context`,`extension`)
 VALUES
-	(1,2,'Python','au319_code',3),
-	(2,2,'JavaScript','au319_code',2),
-	(3,2,'Ruby','au319_code',3),
-	(4,2,'Processing','au319_code',1),
-	(5,2,'HTML/CSS','au319_code',2),
-	(6,1,'Arduino','au319_pcomp',1),
-	(7,1,'Soldering','au319_pcomp',1),
-	(8,3,'Thesis','au319_thesis',1);
+	(1,2,'Python','au319_voitp_code',3),
+	(2,2,'JavaScript','au319_voitp_code',2),
+	(3,2,'Ruby','au319_voitp_code',3),
+	(4,2,'Processing','au319_voitp_code',1),
+	(5,2,'HTML/CSS','au319_voitp_code',2),
+	(6,1,'Arduino','au319_voitp_pcomp',1),
+	(7,1,'Soldering','au319_voitp_pcomp',1),
+	(8,3,'Thesis','au319_voitp_thesis',1);
 
 INSERT INTO `experts_specialties` (`id`,`expert_id`,`specialty_id`)
 VALUES
