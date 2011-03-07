@@ -9,31 +9,49 @@ ini_set('display_errors', true);
 require_once("info.php");
 
 
-
 // Connect to the DB
 $connect = mysql_connect($dbhost, $dbuser, $dbpass) or die ('Error connecting to mysql');
 mysql_select_db($dbname, $connect);
-
-if (!$dbname)
-  die("Error " . mysql_errno() . " : " . mysql_error());
 
   
 if (!empty($_REQUEST)) {
 	
 	$phone_number = $_REQUEST['phone_number'];
 	
-		$get_phone = "SELECT id	FROM experts WHERE phone_number = $phone_number";
+	$get_phone = "SELECT id	FROM experts WHERE phone_number = '$phone_number'";
+	
+	$result = mysql_query($get_phone, $connect);
+	
+	$row = mysql_fetch_array($result);
+
+	$id = $row['id'];
 	
 	if (!$id) {
+	
+		$first_name = $_REQUEST['first_name'];
+		$last_name = $_REQUEST['last_name'];
+				
+		$get_id = "INSERT INTO experts (first_name, last_name, phone_number, created_on) VALUES ('$first_name', '$last_name', '$phone_number', NOW())";
 		
-		$get_id = "INSERT INTO experts (first_name, last_name, created_on) VALUES ($first_name, $last_name, NOW())";
+		//echo $get_id;
+						
+		mysql_query($get_id, $connect);
 		
-		$id = mysql_insert_id();
+
+		$id = mysql_insert_id();		
+		
 	}
 	
 	// Delete specialties
-	
-		$remove_specialties = "DELETE FROM `experts_specialties` WHERE `expert_id` = $id";
+		
+		$specialties = $_REQUEST['specialties'];
+
+		$remove_specialties = "DELETE FROM experts_specialties WHERE expert_id = $id";
+		
+		echo $remove_specialties;
+		
+		mysql_query($remove_specialties, $connect);
+
 	
 	// Insert new specialties
 	
@@ -41,30 +59,47 @@ if (!empty($_REQUEST)) {
 		
 		$add_specialties = "INSERT INTO experts_specialties 
 		VALUES ($id, $specialty_id)";
+		
+		//echo $add_specialties;
+		
+		mysql_query($add_specialties, $connect);
+
 	}
 	
 	// Delete availability
 	
-		$remove_availability = "DELETE FROM `availability` WHERE `expert_id` = $id";
+		$remove_availability = "DELETE FROM availability WHERE expert_id = $id";
+		
+		//echo $remove_availability;
+		
+		mysql_query($remove_availability, $connect);
+
 	
 	// Insert new availability
 	
 	foreach ($_REQUEST['availability'] as $key => $day) {
-		if (!$day['checked']) continue;
+		if (!$day && !$day['checked']) continue;
 		
-		if ($day['allday']) {
+		if (isset($day['allday'])) {
 			$allday = true;
 			$from = null;
 			$through = null;
+			
 		} else {
+			
 			$allday = false;
 			$from = $day['from'];
 			$through = $day['through'];
 		}
 		
-		// INSERT INTO availability (expert_id, day, from, through, allday)
-		// VALUES ($id, $key, $from, $through, $allday)
+		$add_availability = "INSERT INTO availability (expert_id, day, from, through, allday VALUES ($id, '$key', '$from', '$through', '$allday')";
+		
+		//echo $add_availability;
+		
+		mysql_query($add_availability, $connect);
+
 	}
+	
 }
 
 ?>
@@ -78,7 +113,7 @@ if (!empty($_REQUEST)) {
 <!-- for testing only -->
 <pre><?php print_r($_REQUEST); ?></pre>
 
-<form action="" method="post">
+<form action="http://www.itp.nyu.edu/~au319/redial/thankyou.php" method="post">
 	<p>ITP Tips is a Redial project that connects ITP experts on a variety of topics with students in need of some quick assistance.</p> 
 	<p>Once you register as an expert in one of the fields below, you will be added to a list of potential experts who may be called upon by students seeking quick counsel.</p>
 	<p>If you receive a call, you will have up to two minutes to answer questions and direct the caller to other resources that may help address their problem. After two minutes, the call will automatically disconnect.</p>
@@ -102,7 +137,7 @@ if (!empty($_REQUEST)) {
 <h2>AVAILABILITY:</h2>
 <p><em>Please check all that apply</em></p>
 
-<input type="checkbox" name="availability[1][checked]" value="1" /> MON from
+<input type="checkbox" name="availability[2][checked]" value="1" /> MON from
 <select name="availability[1][from]">
 	<option value="10:00:00">10:00 AM</option>
 	<option value="11:00:00">11:00 AM</option>
@@ -135,9 +170,9 @@ if (!empty($_REQUEST)) {
 	<option value="22:00:00">10:30 PM</option>
 	<option value="23:00:00">11:30 PM</option>
 </select>
-or ALL DAY <input type="checkbox" name="availability[1][allday]" value="1" /> 
+or ALL DAY <input type="checkbox" name="availability[2][allday]" value="1" /> 
 <br/>
-<input type="checkbox" name="availability[2][checked]" value="1" /> TUE from
+<input type="checkbox" name="availability[3][checked]" value="1" /> TUE from
 <select name="availability[2][from]">
 	<option value="10:00:00">10:00 AM</option>
 	<option value="11:00:00">11:00 AM</option>
@@ -170,9 +205,9 @@ or ALL DAY <input type="checkbox" name="availability[1][allday]" value="1" />
 	<option value="22:00:00">10:30 PM</option>
 	<option value="23:00:00">11:30 PM</option>
 	</select>
-or ALL DAY <input type="checkbox" name="availability[2][allday]" value="1" /> 
+or ALL DAY <input type="checkbox" name="availability[3][allday]" value="1" /> 
 <br/>
-<input type="checkbox" name="availability[3][checked]" value="1" /> WED from
+<input type="checkbox" name="availability[4][checked]" value="1" /> WED from
 <select name="availability[3][from]">
 	<option value="10:00:00">10:00 AM</option>
 	<option value="11:00:00">11:00 AM</option>
@@ -205,10 +240,10 @@ or ALL DAY <input type="checkbox" name="availability[2][allday]" value="1" />
 	<option value="22:00:00">10:30 PM</option>
 	<option value="23:00:00">11:30 PM</option>
 </select>
-or ALL DAY <input type="checkbox" name="availability[1][allday]" value="1" /> 
+or ALL DAY <input type="checkbox" name="availability[4][allday]" value="1" /> 
 
 <br/>
-<input type="checkbox" name="availability[4][checked]" value="1" /> THU from
+<input type="checkbox" name="availability[5][checked]" value="1" /> THU from
 <select name="availability[4][from]">
 	<option value="10:00:00">10:00 AM</option>
 	<option value="11:00:00">11:00 AM</option>
@@ -241,10 +276,10 @@ or ALL DAY <input type="checkbox" name="availability[1][allday]" value="1" />
 	<option value="22:00:00">10:30 PM</option>
 	<option value="23:00:00">11:30 PM</option>
 	</select>
-or ALL DAY <input type="checkbox" name="availability[1][allday]" value="1" /> 
+or ALL DAY <input type="checkbox" name="availability[5][allday]" value="1" /> 
 
 <br/>
-<input type="checkbox" name="availability[5][checked]" value="1" /> FRI from
+<input type="checkbox" name="availability[6][checked]" value="1" /> FRI from
 <select name="availability[5][from]">
 	<option value="10:00:00">10:00 AM</option>
 	<option value="11:00:00">11:00 AM</option>
@@ -277,10 +312,10 @@ or ALL DAY <input type="checkbox" name="availability[1][allday]" value="1" />
 	<option value="22:00:00">10:30 PM</option>
 	<option value="23:00:00">11:30 PM</option>
 	</select>
-or ALL DAY <input type="checkbox" name="availability[1][allday]" value="1" /> 
+or ALL DAY <input type="checkbox" name="availability[6][allday]" value="1" /> 
 
 <br/>
-<input type="checkbox" name="availability[6][checked]" value="1" /> SAT from
+<input type="checkbox" name="availability[7][checked]" value="1" /> SAT from
 <select name="availability[6][from]">
 	<option value="10:00:00">10:00 AM</option>
 	<option value="11:00:00">11:00 AM</option>
@@ -313,10 +348,10 @@ or ALL DAY <input type="checkbox" name="availability[1][allday]" value="1" />
 	<option value="22:00:00">10:30 PM</option>
 	<option value="23:00:00">11:30 PM</option>
 </select>
-or ALL DAY <input type="checkbox" name="availability[1][allday]" value="1" /> 
+or ALL DAY <input type="checkbox" name="availability[7][allday]" value="1" /> 
 
 <br/>
-<input type="checkbox" name="availability[7][checked]" value="1" /> SUN from
+<input type="checkbox" name="availability[1][checked]" value="1" /> SUN from
 <select name="availability[7][from]">
 	<option value="10:00:00">10:00 AM</option>
 	<option value="11:00:00">11:00 AM</option>
@@ -353,7 +388,7 @@ or ALL DAY <input type="checkbox" name="availability[1][allday]" value="1" />
 
 <br/>
 
-<p><input type="submit" value="Go" /></p>
+<p><input type="submit"  value="Go" /></p>
 </form>
 
 </body>
