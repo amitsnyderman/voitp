@@ -57,7 +57,7 @@ if (!empty($_REQUEST)) {
 	
 	foreach ($_REQUEST['specialties'] as $specialty_id) {
 		
-		$add_specialties = "INSERT INTO experts_specialties 
+		$add_specialties = "INSERT INTO experts_specialties (expert_id, specialty_id)
 		VALUES ($id, $specialty_id)";
 		
 		//echo $add_specialties;
@@ -92,7 +92,7 @@ if (!empty($_REQUEST)) {
 			$through = $day['through'];
 		}
 		
-		$add_availability = "INSERT INTO availability (expert_id, day, from, through, allday VALUES ($id, '$key', '$from', '$through', '$allday')";
+		$add_availability = "INSERT INTO availability (expert_id, day, from, through, allday) VALUES ($id, '$key', '$from', '$through', '$allday')";
 		
 		//echo $add_availability;
 		
@@ -138,41 +138,6 @@ if (!empty($_REQUEST)) {
 <p><em>Please check all that apply</em></p>
 
 <input type="checkbox" name="availability[2][checked]" value="1" /> MON from
-<select name="availability[1][from]">
-	<option value="10:00:00">10:00 AM</option>
-	<option value="11:00:00">11:00 AM</option>
-	<option value="12:00:00">12:00 PM</option>
-	<option value="13:00:00">1:00 PM</option>
-	<option value="14:00:00">2:00 PM</option>
-	<option value="15:00:00">3:00 PM</option>
-	<option value="16:00:00">4:00 PM</option>
-	<option value="17:00:00">5:00 PM</option>
-	<option value="18:00:00">6:00 PM</option>
-	<option value="19:00:00">7:00 PM</option>
-	<option value="20:00:00">8:00 PM</option>
-	<option value="21:00:00">9:00 PM</option>
-	<option value="22:00:00">10:00 PM</option>
-	<option value="23:00:00">11:00 PM</option>
-</select> until
-<select name="availability[1][through]">
-	<option value="10:00:00">10:30 AM</option>
-	<option value="11:00:00">11:30 AM</option>
-	<option value="12:00:00">12:30 PM</option>
-	<option value="13:00:00">1:30 PM</option>
-	<option value="14:00:00">2:30 PM</option>
-	<option value="15:00:00">3:30 PM</option>
-	<option value="16:00:00">4:30 PM</option>
-	<option value="17:00:00">5:30 PM</option>
-	<option value="18:00:00">6:30 PM</option>
-	<option value="19:00:00">7:30 PM</option>
-	<option value="20:00:00">8:30 PM</option>
-	<option value="21:00:00">9:30 PM</option>
-	<option value="22:00:00">10:30 PM</option>
-	<option value="23:00:00">11:30 PM</option>
-</select>
-or ALL DAY <input type="checkbox" name="availability[2][allday]" value="1" /> 
-<br/>
-<input type="checkbox" name="availability[3][checked]" value="1" /> TUE from
 <select name="availability[2][from]">
 	<option value="10:00:00">10:00 AM</option>
 	<option value="11:00:00">11:00 AM</option>
@@ -204,10 +169,10 @@ or ALL DAY <input type="checkbox" name="availability[2][allday]" value="1" />
 	<option value="21:00:00">9:30 PM</option>
 	<option value="22:00:00">10:30 PM</option>
 	<option value="23:00:00">11:30 PM</option>
-	</select>
-or ALL DAY <input type="checkbox" name="availability[3][allday]" value="1" /> 
+</select>
+or ALL DAY <input type="checkbox" name="availability[2][allday]" value="1" /> 
 <br/>
-<input type="checkbox" name="availability[4][checked]" value="1" /> WED from
+<input type="checkbox" name="availability[3][checked]" value="1" /> TUE from
 <select name="availability[3][from]">
 	<option value="10:00:00">10:00 AM</option>
 	<option value="11:00:00">11:00 AM</option>
@@ -239,11 +204,10 @@ or ALL DAY <input type="checkbox" name="availability[3][allday]" value="1" />
 	<option value="21:00:00">9:30 PM</option>
 	<option value="22:00:00">10:30 PM</option>
 	<option value="23:00:00">11:30 PM</option>
-</select>
-or ALL DAY <input type="checkbox" name="availability[4][allday]" value="1" /> 
-
+	</select>
+or ALL DAY <input type="checkbox" name="availability[3][allday]" value="1" /> 
 <br/>
-<input type="checkbox" name="availability[5][checked]" value="1" /> THU from
+<input type="checkbox" name="availability[4][checked]" value="1" /> WED from
 <select name="availability[4][from]">
 	<option value="10:00:00">10:00 AM</option>
 	<option value="11:00:00">11:00 AM</option>
@@ -259,7 +223,7 @@ or ALL DAY <input type="checkbox" name="availability[4][allday]" value="1" />
 	<option value="21:00:00">9:00 PM</option>
 	<option value="22:00:00">10:00 PM</option>
 	<option value="23:00:00">11:00 PM</option>
-	</select> until
+</select> until
 <select name="availability[4][through]">
 	<option value="10:00:00">10:30 AM</option>
 	<option value="11:00:00">11:30 AM</option>
@@ -275,11 +239,11 @@ or ALL DAY <input type="checkbox" name="availability[4][allday]" value="1" />
 	<option value="21:00:00">9:30 PM</option>
 	<option value="22:00:00">10:30 PM</option>
 	<option value="23:00:00">11:30 PM</option>
-	</select>
-or ALL DAY <input type="checkbox" name="availability[5][allday]" value="1" /> 
+</select>
+or ALL DAY <input type="checkbox" name="availability[4][allday]" value="1" /> 
 
 <br/>
-<input type="checkbox" name="availability[6][checked]" value="1" /> FRI from
+<input type="checkbox" name="availability[5][checked]" value="1" /> THU from
 <select name="availability[5][from]">
 	<option value="10:00:00">10:00 AM</option>
 	<option value="11:00:00">11:00 AM</option>
@@ -312,10 +276,10 @@ or ALL DAY <input type="checkbox" name="availability[5][allday]" value="1" />
 	<option value="22:00:00">10:30 PM</option>
 	<option value="23:00:00">11:30 PM</option>
 	</select>
-or ALL DAY <input type="checkbox" name="availability[6][allday]" value="1" /> 
+or ALL DAY <input type="checkbox" name="availability[5][allday]" value="1" /> 
 
 <br/>
-<input type="checkbox" name="availability[7][checked]" value="1" /> SAT from
+<input type="checkbox" name="availability[6][checked]" value="1" /> FRI from
 <select name="availability[6][from]">
 	<option value="10:00:00">10:00 AM</option>
 	<option value="11:00:00">11:00 AM</option>
@@ -331,8 +295,44 @@ or ALL DAY <input type="checkbox" name="availability[6][allday]" value="1" />
 	<option value="21:00:00">9:00 PM</option>
 	<option value="22:00:00">10:00 PM</option>
 	<option value="23:00:00">11:00 PM</option>
-</select> until
+	</select> until
 <select name="availability[6][through]">
+	<option value="10:00:00">10:30 AM</option>
+	<option value="11:00:00">11:30 AM</option>
+	<option value="12:00:00">12:30 PM</option>
+	<option value="13:00:00">1:30 PM</option>
+	<option value="14:00:00">2:30 PM</option>
+	<option value="15:00:00">3:30 PM</option>
+	<option value="16:00:00">4:30 PM</option>
+	<option value="17:00:00">5:30 PM</option>
+	<option value="18:00:00">6:30 PM</option>
+	<option value="19:00:00">7:30 PM</option>
+	<option value="20:00:00">8:30 PM</option>
+	<option value="21:00:00">9:30 PM</option>
+	<option value="22:00:00">10:30 PM</option>
+	<option value="23:00:00">11:30 PM</option>
+	</select>
+or ALL DAY <input type="checkbox" name="availability[6][allday]" value="1" /> 
+
+<br/>
+<input type="checkbox" name="availability[7][checked]" value="1" /> SAT from
+<select name="availability[7][from]">
+	<option value="10:00:00">10:00 AM</option>
+	<option value="11:00:00">11:00 AM</option>
+	<option value="12:00:00">12:00 PM</option>
+	<option value="13:00:00">1:00 PM</option>
+	<option value="14:00:00">2:00 PM</option>
+	<option value="15:00:00">3:00 PM</option>
+	<option value="16:00:00">4:00 PM</option>
+	<option value="17:00:00">5:00 PM</option>
+	<option value="18:00:00">6:00 PM</option>
+	<option value="19:00:00">7:00 PM</option>
+	<option value="20:00:00">8:00 PM</option>
+	<option value="21:00:00">9:00 PM</option>
+	<option value="22:00:00">10:00 PM</option>
+	<option value="23:00:00">11:00 PM</option>
+</select> until
+<select name="availability[7][through]">
 	<option value="10:00:00">10:30 AM</option>
 	<option value="11:00:00">11:30 AM</option>
 	<option value="12:00:00">12:30 PM</option>
@@ -352,7 +352,7 @@ or ALL DAY <input type="checkbox" name="availability[7][allday]" value="1" />
 
 <br/>
 <input type="checkbox" name="availability[1][checked]" value="1" /> SUN from
-<select name="availability[7][from]">
+<select name="availability[1][from]">
 	<option value="10:00:00">10:00 AM</option>
 	<option value="11:00:00">11:00 AM</option>
 	<option value="12:00:00">12:00 PM</option>
@@ -368,7 +368,7 @@ or ALL DAY <input type="checkbox" name="availability[7][allday]" value="1" />
 	<option value="22:00:00">10:00 PM</option>
 	<option value="23:00:00">11:00 PM</option>
 </select> until
-<select name="availability[7][through]">
+<select name="availability[1][through]">
 	<option value="10:00:00">10:30 AM</option>
 	<option value="11:00:00">11:30 AM</option>
 	<option value="12:00:00">12:30 PM</option>
