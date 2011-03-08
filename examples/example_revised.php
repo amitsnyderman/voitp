@@ -2,21 +2,22 @@
 
 
 // Error Reporting 
-ini_set('error_reporting', E_ALL);
-ini_set('display_errors', true); 
+//ini_set('error_reporting', E_ALL);
+//ini_set('display_errors', true); 
 
 // Retrive DB Info 
 require_once("info.php");
 
+$days = array(null, 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT');
 
 // Connect to the DB
 $connect = mysql_connect($dbhost, $dbuser, $dbpass) or die ('Error connecting to mysql');
 mysql_select_db($dbname, $connect);
 
   
-if (!empty($_REQUEST)) {
+if (!empty($_POST)) {
 	
-	$phone_number = $_REQUEST['phone_number'];
+	$phone_number = $_POST['phone_number'];
 	
 	$get_phone = "SELECT id	FROM experts WHERE phone_number = '$phone_number'";
 	
@@ -28,8 +29,8 @@ if (!empty($_REQUEST)) {
 	
 	if (!$id) {
 	
-		$first_name = $_REQUEST['first_name'];
-		$last_name = $_REQUEST['last_name'];
+		$first_name = $_POST['first_name'];
+		$last_name = $_POST['last_name'];
 				
 		$get_id = "INSERT INTO experts (first_name, last_name, phone_number, created_on) VALUES ('$first_name', '$last_name', '$phone_number', NOW())";
 		
@@ -44,18 +45,18 @@ if (!empty($_REQUEST)) {
 	
 	// Delete specialties
 		
-		$specialties = $_REQUEST['specialties'];
+		$specialties = $_POST['specialties'];
 
 		$remove_specialties = "DELETE FROM experts_specialties WHERE expert_id = $id";
 		
-		echo $remove_specialties;
+		//echo $remove_specialties;
 		
 		mysql_query($remove_specialties, $connect);
 
 	
 	// Insert new specialties
 	
-	foreach ($_REQUEST['specialties'] as $specialty_id) {
+	foreach ($_POST['specialties'] as $specialty_id) {
 		
 		$add_specialties = "INSERT INTO experts_specialties (expert_id, specialty_id)
 		VALUES ($id, $specialty_id)";
@@ -77,10 +78,10 @@ if (!empty($_REQUEST)) {
 	
 	// Insert new availability
 	
-	foreach ($_REQUEST['availability'] as $key => $day) {
-		if (!$day && !$day['checked']) continue;
+	foreach ($_POST['availability'] as $key => $day) {
+		if (!$day || !$day['checked']) continue;
 		
-		if (isset($day['allday'])) {
+		if (!empty($day['allday'])) {
 			$allday = true;
 			$from = null;
 			$through = null;
@@ -92,7 +93,7 @@ if (!empty($_REQUEST)) {
 			$through = $day['through'];
 		}
 		
-		$add_availability = "INSERT INTO availability (expert_id, day, from, through, allday) VALUES ($id, '$key', '$from', '$through', '$allday')";
+		$add_availability = "INSERT INTO availability (`expert_id`, `day`, `from`, `through`, `allday`) VALUES ($id, '$key', '$from', '$through', '$allday')";
 		
 		//echo $add_availability;
 		
@@ -100,24 +101,24 @@ if (!empty($_REQUEST)) {
 
 	}
 	
+header('location: http://itp.nyu.edu/~au319/redial/thankyou.php');	
 }
 
 ?>
 
 <html>
 	<head>
-		<title>Register for ITP Tips</title>
+		<title>Register for que?</title>
 	</head>
 <body>
 
-<!-- for testing only -->
-<pre><?php print_r($_REQUEST); ?></pre>
 
-<form action="http://www.itp.nyu.edu/~au319/redial/thankyou.php" method="post">
-	<p>ITP Tips is a Redial project that connects ITP experts on a variety of topics with students in need of some quick assistance.</p> 
-	<p>Once you register as an expert in one of the fields below, you will be added to a list of potential experts who may be called upon by students seeking quick counsel.</p>
-	<p>If you receive a call, you will have up to two minutes to answer questions and direct the caller to other resources that may help address their problem. After two minutes, the call will automatically disconnect.</p>
-	<p>Using the below form, please indicate the phone number where you would like to be called as well as the dates and time window when are available to receive calls.</p>
+
+<form action="" method="post">
+	<p>que? is an awesome Redial project that connects ITP experts on a variety of topics with students in need of some quick assistance.</p> 
+	<p>Whenever the floor is open, just pick up the black phone located in the hallway heading towards the Shop and automatically get connected to someone who can help with questions related to Physical Computing, Processing, HTML/CSS, Python or Thesis.</p>
+	<p>Experts will have up to two minutes to answer questions and direct the caller to other resources to help solve their problem. After two minutes, the call will automatically disconnect, so think quick!</p>
+	<p>Want to help your fellow students/ To register as an expert, please fill out the below form indicating the phone number where you would like to be called as well as the days and time window when are available to receive calls.</p>
 			 
 <label>First Name: </label><input type="text" name="first_name" maxlength="255" size="8" value="" /><br/>
 
@@ -137,256 +138,62 @@ if (!empty($_REQUEST)) {
 <h2>AVAILABILITY:</h2>
 <p><em>Please check all that apply</em></p>
 
-<input type="checkbox" name="availability[2][checked]" value="1" /> MON from
-<select name="availability[2][from]">
-	<option value="10:00:00">10:00 AM</option>
-	<option value="11:00:00">11:00 AM</option>
-	<option value="12:00:00">12:00 PM</option>
-	<option value="13:00:00">1:00 PM</option>
-	<option value="14:00:00">2:00 PM</option>
-	<option value="15:00:00">3:00 PM</option>
-	<option value="16:00:00">4:00 PM</option>
-	<option value="17:00:00">5:00 PM</option>
-	<option value="18:00:00">6:00 PM</option>
-	<option value="19:00:00">7:00 PM</option>
-	<option value="20:00:00">8:00 PM</option>
-	<option value="21:00:00">9:00 PM</option>
-	<option value="22:00:00">10:00 PM</option>
-	<option value="23:00:00">11:00 PM</option>
-</select> until
-<select name="availability[2][through]">
-	<option value="10:00:00">10:30 AM</option>
-	<option value="11:00:00">11:30 AM</option>
-	<option value="12:00:00">12:30 PM</option>
-	<option value="13:00:00">1:30 PM</option>
-	<option value="14:00:00">2:30 PM</option>
-	<option value="15:00:00">3:30 PM</option>
-	<option value="16:00:00">4:30 PM</option>
-	<option value="17:00:00">5:30 PM</option>
-	<option value="18:00:00">6:30 PM</option>
-	<option value="19:00:00">7:30 PM</option>
-	<option value="20:00:00">8:30 PM</option>
-	<option value="21:00:00">9:30 PM</option>
-	<option value="22:00:00">10:30 PM</option>
-	<option value="23:00:00">11:30 PM</option>
-</select>
-or ALL DAY <input type="checkbox" name="availability[2][allday]" value="1" /> 
-<br/>
-<input type="checkbox" name="availability[3][checked]" value="1" /> TUE from
-<select name="availability[3][from]">
-	<option value="10:00:00">10:00 AM</option>
-	<option value="11:00:00">11:00 AM</option>
-	<option value="12:00:00">12:00 PM</option>
-	<option value="13:00:00">1:00 PM</option>
-	<option value="14:00:00">2:00 PM</option>
-	<option value="15:00:00">3:00 PM</option>
-	<option value="16:00:00">4:00 PM</option>
-	<option value="17:00:00">5:00 PM</option>
-	<option value="18:00:00">6:00 PM</option>
-	<option value="19:00:00">7:00 PM</option>
-	<option value="20:00:00">8:00 PM</option>
-	<option value="21:00:00">9:00 PM</option>
-	<option value="22:00:00">10:00 PM</option>
-	<option value="23:00:00">11:00 PM</option>
-</select> until
-<select name="availability[3][through]">
-	<option value="10:00:00">10:30 AM</option>
-	<option value="11:00:00">11:30 AM</option>
-	<option value="12:00:00">12:30 PM</option>
-	<option value="13:00:00">1:30 PM</option>
-	<option value="14:00:00">2:30 PM</option>
-	<option value="15:00:00">3:30 PM</option>
-	<option value="16:00:00">4:30 PM</option>
-	<option value="17:00:00">5:30 PM</option>
-	<option value="18:00:00">6:30 PM</option>
-	<option value="19:00:00">7:30 PM</option>
-	<option value="20:00:00">8:30 PM</option>
-	<option value="21:00:00">9:30 PM</option>
-	<option value="22:00:00">10:30 PM</option>
-	<option value="23:00:00">11:30 PM</option>
-	</select>
-or ALL DAY <input type="checkbox" name="availability[3][allday]" value="1" /> 
-<br/>
-<input type="checkbox" name="availability[4][checked]" value="1" /> WED from
-<select name="availability[4][from]">
-	<option value="10:00:00">10:00 AM</option>
-	<option value="11:00:00">11:00 AM</option>
-	<option value="12:00:00">12:00 PM</option>
-	<option value="13:00:00">1:00 PM</option>
-	<option value="14:00:00">2:00 PM</option>
-	<option value="15:00:00">3:00 PM</option>
-	<option value="16:00:00">4:00 PM</option>
-	<option value="17:00:00">5:00 PM</option>
-	<option value="18:00:00">6:00 PM</option>
-	<option value="19:00:00">7:00 PM</option>
-	<option value="20:00:00">8:00 PM</option>
-	<option value="21:00:00">9:00 PM</option>
-	<option value="22:00:00">10:00 PM</option>
-	<option value="23:00:00">11:00 PM</option>
-</select> until
-<select name="availability[4][through]">
-	<option value="10:00:00">10:30 AM</option>
-	<option value="11:00:00">11:30 AM</option>
-	<option value="12:00:00">12:30 PM</option>
-	<option value="13:00:00">1:30 PM</option>
-	<option value="14:00:00">2:30 PM</option>
-	<option value="15:00:00">3:30 PM</option>
-	<option value="16:00:00">4:30 PM</option>
-	<option value="17:00:00">5:30 PM</option>
-	<option value="18:00:00">6:30 PM</option>
-	<option value="19:00:00">7:30 PM</option>
-	<option value="20:00:00">8:30 PM</option>
-	<option value="21:00:00">9:30 PM</option>
-	<option value="22:00:00">10:30 PM</option>
-	<option value="23:00:00">11:30 PM</option>
-</select>
-or ALL DAY <input type="checkbox" name="availability[4][allday]" value="1" /> 
-
-<br/>
-<input type="checkbox" name="availability[5][checked]" value="1" /> THU from
-<select name="availability[5][from]">
-	<option value="10:00:00">10:00 AM</option>
-	<option value="11:00:00">11:00 AM</option>
-	<option value="12:00:00">12:00 PM</option>
-	<option value="13:00:00">1:00 PM</option>
-	<option value="14:00:00">2:00 PM</option>
-	<option value="15:00:00">3:00 PM</option>
-	<option value="16:00:00">4:00 PM</option>
-	<option value="17:00:00">5:00 PM</option>
-	<option value="18:00:00">6:00 PM</option>
-	<option value="19:00:00">7:00 PM</option>
-	<option value="20:00:00">8:00 PM</option>
-	<option value="21:00:00">9:00 PM</option>
-	<option value="22:00:00">10:00 PM</option>
-	<option value="23:00:00">11:00 PM</option>
+<?php for ($day = 1; $day <= 7; $day++): ?>
+	<input type="checkbox" name="availability[<?= $day ?>][checked]" value="1" /> <?= $days[$day] ?> from
+	<select name="availability[<?= $day ?>][from]">
+		<option value="00:00:00">12:00 AM</option>
+		<option value="01:00:00">1:00 AM</option>
+		<option value="02:00:00">2:00 AM</option>
+		<option value="03:00:00">3:00 AM</option>
+		<option value="04:00:00">4:00 AM</option>
+		<option value="05:00:00">5:00 AM</option>
+		<option value="06:00:00">6:00 AM</option>
+		<option value="07:00:00">7:00 AM</option>
+		<option value="08:00:00">8:00 AM</option>
+		<option value="09:00:00">9:00 AM</option>
+		<option value="10:00:00" selected="selected">10:00 AM</option>
+		<option value="11:00:00">11:00 AM</option>
+		<option value="12:00:00">12:00 PM</option>
+		<option value="13:00:00">1:00 PM</option>
+		<option value="14:00:00">2:00 PM</option>
+		<option value="15:00:00">3:00 PM</option>
+		<option value="16:00:00">4:00 PM</option>
+		<option value="17:00:00">5:00 PM</option>
+		<option value="18:00:00">6:00 PM</option>
+		<option value="19:00:00">7:00 PM</option>
+		<option value="20:00:00">8:00 PM</option>
+		<option value="21:00:00">9:00 PM</option>
+		<option value="22:00:00">10:00 PM</option>
+		<option value="23:00:00">11:00 PM</option>
 	</select> until
-<select name="availability[5][through]">
-	<option value="10:00:00">10:30 AM</option>
-	<option value="11:00:00">11:30 AM</option>
-	<option value="12:00:00">12:30 PM</option>
-	<option value="13:00:00">1:30 PM</option>
-	<option value="14:00:00">2:30 PM</option>
-	<option value="15:00:00">3:30 PM</option>
-	<option value="16:00:00">4:30 PM</option>
-	<option value="17:00:00">5:30 PM</option>
-	<option value="18:00:00">6:30 PM</option>
-	<option value="19:00:00">7:30 PM</option>
-	<option value="20:00:00">8:30 PM</option>
-	<option value="21:00:00">9:30 PM</option>
-	<option value="22:00:00">10:30 PM</option>
-	<option value="23:00:00">11:30 PM</option>
+	<select name="availability[<?= $day ?>][through]">
+		<option value="00:00:00">12:00 AM</option>
+		<option value="01:00:00">1:00 AM</option>
+		<option value="02:00:00">2:00 AM</option>
+		<option value="03:00:00">3:00 AM</option>
+		<option value="04:00:00">4:00 AM</option>
+		<option value="05:00:00">5:00 AM</option>
+		<option value="06:00:00">6:00 AM</option>
+		<option value="07:00:00">7:00 AM</option>
+		<option value="08:00:00">8:00 AM</option>
+		<option value="09:00:00">9:00 AM</option>
+		<option value="10:00:00">10:00 AM</option>
+		<option value="11:00:00"selected="selected">11:00 AM</option>
+		<option value="12:00:00">12:00 PM</option>
+		<option value="13:00:00">1:00 PM</option>
+		<option value="14:00:00">2:00 PM</option>
+		<option value="15:00:00">3:00 PM</option>
+		<option value="16:00:00">4:00 PM</option>
+		<option value="17:00:00">5:00 PM</option>
+		<option value="18:00:00">6:00 PM</option>
+		<option value="19:00:00">7:00 PM</option>
+		<option value="20:00:00">8:00 PM</option>
+		<option value="21:00:00">9:00 PM</option>
+		<option value="22:00:00">10:00 PM</option>
+		<option value="23:00:00">11:00 PM</option>
 	</select>
-or ALL DAY <input type="checkbox" name="availability[5][allday]" value="1" /> 
-
-<br/>
-<input type="checkbox" name="availability[6][checked]" value="1" /> FRI from
-<select name="availability[6][from]">
-	<option value="10:00:00">10:00 AM</option>
-	<option value="11:00:00">11:00 AM</option>
-	<option value="12:00:00">12:00 PM</option>
-	<option value="13:00:00">1:00 PM</option>
-	<option value="14:00:00">2:00 PM</option>
-	<option value="15:00:00">3:00 PM</option>
-	<option value="16:00:00">4:00 PM</option>
-	<option value="17:00:00">5:00 PM</option>
-	<option value="18:00:00">6:00 PM</option>
-	<option value="19:00:00">7:00 PM</option>
-	<option value="20:00:00">8:00 PM</option>
-	<option value="21:00:00">9:00 PM</option>
-	<option value="22:00:00">10:00 PM</option>
-	<option value="23:00:00">11:00 PM</option>
-	</select> until
-<select name="availability[6][through]">
-	<option value="10:00:00">10:30 AM</option>
-	<option value="11:00:00">11:30 AM</option>
-	<option value="12:00:00">12:30 PM</option>
-	<option value="13:00:00">1:30 PM</option>
-	<option value="14:00:00">2:30 PM</option>
-	<option value="15:00:00">3:30 PM</option>
-	<option value="16:00:00">4:30 PM</option>
-	<option value="17:00:00">5:30 PM</option>
-	<option value="18:00:00">6:30 PM</option>
-	<option value="19:00:00">7:30 PM</option>
-	<option value="20:00:00">8:30 PM</option>
-	<option value="21:00:00">9:30 PM</option>
-	<option value="22:00:00">10:30 PM</option>
-	<option value="23:00:00">11:30 PM</option>
-	</select>
-or ALL DAY <input type="checkbox" name="availability[6][allday]" value="1" /> 
-
-<br/>
-<input type="checkbox" name="availability[7][checked]" value="1" /> SAT from
-<select name="availability[7][from]">
-	<option value="10:00:00">10:00 AM</option>
-	<option value="11:00:00">11:00 AM</option>
-	<option value="12:00:00">12:00 PM</option>
-	<option value="13:00:00">1:00 PM</option>
-	<option value="14:00:00">2:00 PM</option>
-	<option value="15:00:00">3:00 PM</option>
-	<option value="16:00:00">4:00 PM</option>
-	<option value="17:00:00">5:00 PM</option>
-	<option value="18:00:00">6:00 PM</option>
-	<option value="19:00:00">7:00 PM</option>
-	<option value="20:00:00">8:00 PM</option>
-	<option value="21:00:00">9:00 PM</option>
-	<option value="22:00:00">10:00 PM</option>
-	<option value="23:00:00">11:00 PM</option>
-</select> until
-<select name="availability[7][through]">
-	<option value="10:00:00">10:30 AM</option>
-	<option value="11:00:00">11:30 AM</option>
-	<option value="12:00:00">12:30 PM</option>
-	<option value="13:00:00">1:30 PM</option>
-	<option value="14:00:00">2:30 PM</option>
-	<option value="15:00:00">3:30 PM</option>
-	<option value="16:00:00">4:30 PM</option>
-	<option value="17:00:00">5:30 PM</option>
-	<option value="18:00:00">6:30 PM</option>
-	<option value="19:00:00">7:30 PM</option>
-	<option value="20:00:00">8:30 PM</option>
-	<option value="21:00:00">9:30 PM</option>
-	<option value="22:00:00">10:30 PM</option>
-	<option value="23:00:00">11:30 PM</option>
-</select>
-or ALL DAY <input type="checkbox" name="availability[7][allday]" value="1" /> 
-
-<br/>
-<input type="checkbox" name="availability[1][checked]" value="1" /> SUN from
-<select name="availability[1][from]">
-	<option value="10:00:00">10:00 AM</option>
-	<option value="11:00:00">11:00 AM</option>
-	<option value="12:00:00">12:00 PM</option>
-	<option value="13:00:00">1:00 PM</option>
-	<option value="14:00:00">2:00 PM</option>
-	<option value="15:00:00">3:00 PM</option>
-	<option value="16:00:00">4:00 PM</option>
-	<option value="17:00:00">5:00 PM</option>
-	<option value="18:00:00">6:00 PM</option>
-	<option value="19:00:00">7:00 PM</option>
-	<option value="20:00:00">8:00 PM</option>
-	<option value="21:00:00">9:00 PM</option>
-	<option value="22:00:00">10:00 PM</option>
-	<option value="23:00:00">11:00 PM</option>
-</select> until
-<select name="availability[1][through]">
-	<option value="10:00:00">10:30 AM</option>
-	<option value="11:00:00">11:30 AM</option>
-	<option value="12:00:00">12:30 PM</option>
-	<option value="13:00:00">1:30 PM</option>
-	<option value="14:00:00">2:30 PM</option>
-	<option value="15:00:00">3:30 PM</option>
-	<option value="16:00:00">4:30 PM</option>
-	<option value="17:00:00">5:30 PM</option>
-	<option value="18:00:00">6:30 PM</option>
-	<option value="19:00:00">7:30 PM</option>
-	<option value="20:00:00">8:30 PM</option>
-	<option value="21:00:00">9:30 PM</option>
-	<option value="22:00:00">10:30 PM</option>
-	<option value="23:00:00">11:30 PM</option>
-</select>
-or ALL DAY <input type="checkbox" name="availability[1][allday]" value="1" /> 
-
-<br/>
+	<br/>
+<?php endfor; ?>
 
 <p><input type="submit"  value="Go" /></p>
 </form>
