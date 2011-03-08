@@ -31,6 +31,6 @@ $sql = sprintf(
 	mysql_real_escape_string($call_duration)
 );
 
-mysql_query($sql, $db);
+mysql_query($sql, $db) or die(mysql_error());
 
 ?>

@@ -48,8 +48,8 @@ $sql = sprintf(
 // Get the expert's #
 // We're not storing the leading 1 so prepend it
 
-$result = mysql_query($sql, $db);
-$row = mysql_fetch_assoc($result);
+$result = mysql_query($sql, $db) or die(mysql_error());
+$row = mysql_fetch_assoc($result) or die(mysql_error());
 
 echo $row['phone_number'];
 
