@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Expert</title>
+	<link href="voitp.css" media="all" rel="stylesheet" type="text/css"/>
+	<script src="../vendor/backbone/test/vendor/jquery-1.5.js"></script>
+	<script src="../vendor/backbone/test/vendor/underscore-1.1.4.js"></script>
+	<script src="../vendor/backbone/backbone.js"></script>
+	<script src="expert.js"></script>
+</head>
+
+<body>
+	<div id="expert">
+		<section class="login">
+			<label>
+				Phone Number
+				<input type="text" name="phone_number" id="phone_number" />
+			</label>
+			<button id="login">Login</button>
+		</section>
+		
+		<section id="info"></section>
+		<section id="specialties"></section>
+		<section id="availability"></section>
+		<section id="save">
+			<button id="save">Save Preferences</button>
+		</section>
+	</div>
+	
+	<script type="text/template" id="info-template">
+		<div class="info">
+			<label>
+				First Name
+				<input type="text" name="first_name" value="<%= first_name %>" />
+			</label>
+		
+			<label>
+				Last Name
+				<input type="text" name="last_name" value="<%= last_name %>" />
+			</label>
+		</div>
+	</script>
+	
+	<script type="text/template" id="specialty-template">
+		<div class="specialty">
+			<label>
+				<input type="checkbox" name="specialties[]" value="<%= id %>" <% if (checked) { %>checked="checked"<% } %> />
+				<%= name %>
+			</label>
+		</div>
+	</script>
+	
+	<script type="text/template" id="availability-template">
+		<div class="availability">
+			<label>
+				<input type="checkbox" name="availability[<%= day %>]" value="1" <% if (checked) { %>checked="checked"<% } %> />
+				<%= ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][day] %>
+			</label>
+		
+			<label>
+				From
+				<select name="availability[<%= day %>][from]">
+					<option value="00:00:00">12am</option>
+					<option value="01:00:00">1am</option>
+					<option value="02:00:00">2am</option>
+					<option value="03:00:00">3am</option>
+					<option value="04:00:00">4am</option>
+					<option value="05:00:00">5am</option>
+					<option value="06:00:00">6am</option>
+					<option value="07:00:00">7am</option>
+					<option value="08:00:00">8am</option>
+					<option value="09:00:00">9am</option>
+					<option value="10:00:00">10am</option>
+					<option value="11:00:00">11am</option>
+					<option value="12:00:00">12pm</option>
+					<option value="13:00:00">1pm</option>
+					<option value="14:00:00">2pm</option>
+					<option value="15:00:00">3pm</option>
+					<option value="16:00:00">4pm</option>
+					<option value="17:00:00">5pm</option>
+					<option value="18:00:00">6pm</option>
+					<option value="19:00:00">7pm</option>
+					<option value="20:00:00">8pm</option>
+					<option value="21:00:00">9pm</option>
+					<option value="23:00:00">10pm</option>
+					<option value="23:00:00">11pm</option>
+				</select>
+			</label>
+		
+			<label>
+				Through
+				<select name="availability[<%= day %>][through]">
+					<option value="00:00:00">12am</option>
+					<option value="01:00:00">1am</option>
+					<option value="02:00:00">2am</option>
+					<option value="03:00:00">3am</option>
+					<option value="04:00:00">4am</option>
+					<option value="05:00:00">5am</option>
+					<option value="06:00:00">6am</option>
+					<option value="07:00:00">7am</option>
+					<option value="08:00:00">8am</option>
+					<option value="09:00:00">9am</option>
+					<option value="10:00:00">10am</option>
+					<option value="11:00:00">11am</option>
+					<option value="12:00:00">12pm</option>
+					<option value="13:00:00">1pm</option>
+					<option value="14:00:00">2pm</option>
+					<option value="15:00:00">3pm</option>
+					<option value="16:00:00">4pm</option>
+					<option value="17:00:00">5pm</option>
+					<option value="18:00:00">6pm</option>
+					<option value="19:00:00">7pm</option>
+					<option value="20:00:00">8pm</option>
+					<option value="21:00:00">9pm</option>
+					<option value="23:00:00">10pm</option>
+					<option value="23:00:00">11pm</option>
+				</select>
+			</label>
+		
+			<label>
+				<input type="checkbox" name="availability[<%= day %>][allday]" value="1" <% if (allday) { %>checked="checked"<% } %> />
+				All day
+			</label>
+		</div>
+	</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+body {font-family: helvetica,sans-serif;}
+
+section {
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	background: #eee;
+	padding: 20px;
+	margin: 10px 0;
+	}
+label {
+	font-size: 9px;
+	}
+
+#expert {
+	position: relative;
+	top: 200px;
+	margin: 20px auto;
+	width: 400px;
+	
+	-webkit-transition: all .5s ease-out;
+	}
+#expert.logged_in {
+	top: 0;
+	}
+
+.info label {display: block;}
