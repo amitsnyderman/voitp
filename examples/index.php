@@ -113,10 +113,12 @@ if (!empty($_POST)) {
 <h1>Que?</h1>
 
 <form action="" method="post">
-<p>que? is an awesome Redial project that connects ITP experts on a variety of topics with students in need of some quick assistance.</p> 
+
+<p>que? is an awesome Redial project that connects ITP experts on a variety of topics with students in need of some quick assistance.</p>
 <p>Whenever the floor is open, just pick up the black phone located in the hallway heading towards the Shop and automatically get connected to someone who can help with questions related to Physical Computing, Processing, HTML/CSS, Python or Thesis.</p>
-<p>Experts will have up to two minutes to answer questions and direct the caller to other resources to help solve their problem. After two minutes, the call will automatically disconnect, so think quick!</p>
-<p>Want to help your fellow students/ To register as an expert, please fill out the below form indicating the phone number where you would like to be called as well as the days and time window when are available to receive calls.</p>
+<p>Experts will have up to two minutes to answer questions and direct callers to other resources to help solve their problem. After two minutes, the call will automatically disconnect, so think quick!</p>
+<p>Want to help your fellow students? To register as an expert, please fill out the below form indicating the phone number where you would like to be called as well as the days and time window when are available to receive calls. If you do not pick up the call, it will try another expert on the list.</p>
+<p>To update or change your preferences, just fill out the form again using the same telephone number with which you first registered.</p>
 
 <hr/>
 			 
