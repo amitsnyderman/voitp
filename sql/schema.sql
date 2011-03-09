@@ -79,7 +79,8 @@ INSERT INTO `topics` (`id`,`name`)
 VALUES
 	(1,'Physical Computing'),
 	(2,'Programming'),
-	(3,'Thesis');
+	(3,'Thesis'),
+	(4,'Design');
 
 INSERT INTO `specialties` (`id`,`topic_id`,`name`,`context`,`extension`)
 VALUES
@@ -90,7 +91,14 @@ VALUES
 	(5,2,'HTML/CSS','as860_voitp_code',2),
 	(6,1,'Arduino','as860_voitp_pcomp',1),
 	(7,1,'Soldering','as860_voitp_pcomp',1),
-	(8,3,'Thesis','as860_voitp_thesis',1);
+	(8,3,'Thesis','as860_voitp_thesis',1),
+	(NULL,'4','Photoshop',NULL,NULL),
+	(NULL,'4','Illustrator',NULL,NULL),
+	(NULL,'4','Final Cut',NULL,NULL),
+	(NULL,'4','After Effects',NULL,NULL),
+	(NULL,'1','Analog Electronics',NULL,NULL),
+	(NULL,'1','Fabrication/Construction',NULL,NULL),
+	(NULL,'1','Hardware Hacking',NULL,NULL);
 
 INSERT INTO `experts_specialties` (`id`,`expert_id`,`specialty_id`)
 VALUES

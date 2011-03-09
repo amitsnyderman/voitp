@@ -13,6 +13,25 @@ $days = array(null, 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT');
 $connect = mysql_connect($dbhost, $dbuser, $dbpass) or die ('Error connecting to mysql');
 mysql_select_db($dbname, $connect);
 
+// Get specialties grouped by topic
+
+$specialty_query =<<<SQL
+	SELECT s.id, s.name, t.name AS topic_name
+	FROM specialties s
+	LEFT JOIN topics t
+	ON s.topic_id = t.id
+	ORDER BY t.name,s.name
+SQL;
+
+$topics = array();
+$result = mysql_query($specialty_query, $connect);
+while ($row = mysql_fetch_assoc($result)) {
+	if (!isset($topics[$row['topic_name']]))
+		$topics[$row['topic_name']] = array();
+	array_push($topics[$row['topic_name']], $row);
+}
+
+// Handle user input
   
 if (!empty($_POST)) {
 	
@@ -97,7 +116,7 @@ if (!empty($_POST)) {
 		mysql_query($add_availability, $connect);
 	}
 	
-	header('location: http://itp.nyu.edu/~au319/redial/thankyou.php');	
+	header('location: http://itp.nyu.edu/~as860/que/thankyou.php');	
 }
 
 ?>
@@ -133,10 +152,14 @@ if (!empty($_POST)) {
 
 <h2>Area of Expertise</h2>
 <div id="specialties">
-<?php $result = mysql_query('SELECT * FROM specialties', $connect); ?>
-<?php while ($row = mysql_fetch_assoc($result)): ?>
-	<label><input type="checkbox" name="specialties[]" value="<?= $row['id'] ?>" /> <?= $row['name'] ?></label>
-<?php endwhile; ?>
+<?php foreach ($topics as $key => $topic): ?>
+	<h3><?= $key ?></h3>
+	<div>
+	<?php foreach ($topic as $row): ?>
+		<label><input type="checkbox" name="specialties[]" value="<?= $row['id'] ?>" /> <?= $row['name'] ?></label>
+	<?php endforeach; ?>
+	</div>
+<?php endforeach; ?>
 </div>
 
 <h2>Availability</h2>
