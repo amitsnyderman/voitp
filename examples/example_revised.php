@@ -1,6 +1,5 @@
 <?php
 
-
 // Error Reporting 
 //ini_set('error_reporting', E_ALL);
 //ini_set('display_errors', true); 
@@ -45,35 +44,33 @@ if (!empty($_POST)) {
 	
 	// Delete specialties
 		
-		$specialties = $_POST['specialties'];
+	$specialties = $_POST['specialties'];
 
-		$remove_specialties = "DELETE FROM experts_specialties WHERE expert_id = $id";
-		
-		//echo $remove_specialties;
-		
-		mysql_query($remove_specialties, $connect);
+	$remove_specialties = "DELETE FROM experts_specialties WHERE expert_id = $id";
+	
+	//echo $remove_specialties;
+	
+	mysql_query($remove_specialties, $connect);
 
 	
 	// Insert new specialties
 	
 	foreach ($_POST['specialties'] as $specialty_id) {
 		
-		$add_specialties = "INSERT INTO experts_specialties (expert_id, specialty_id)
-		VALUES ($id, $specialty_id)";
+		$add_specialties = "INSERT INTO experts_specialties (expert_id, specialty_id) VALUES ($id, $specialty_id)";
 		
 		//echo $add_specialties;
 		
 		mysql_query($add_specialties, $connect);
-
 	}
 	
 	// Delete availability
 	
-		$remove_availability = "DELETE FROM availability WHERE expert_id = $id";
-		
-		//echo $remove_availability;
-		
-		mysql_query($remove_availability, $connect);
+	$remove_availability = "DELETE FROM availability WHERE expert_id = $id";
+	
+	//echo $remove_availability;
+	
+	mysql_query($remove_availability, $connect);
 
 	
 	// Insert new availability
@@ -98,48 +95,55 @@ if (!empty($_POST)) {
 		//echo $add_availability;
 		
 		mysql_query($add_availability, $connect);
-
 	}
 	
-header('location: http://itp.nyu.edu/~au319/redial/thankyou.php');	
+	header('location: http://itp.nyu.edu/~au319/redial/thankyou.php');	
 }
 
 ?>
 
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>Register for que?</title>
-	</head>
+<head>
+	<title>Register for que?</title>
+	<link href="voitp.css" media="all" rel="stylesheet" type="text/css"/>
+</head>
 <body>
 
-
+<h1>Que?</h1>
 
 <form action="" method="post">
-	<p>que? is an awesome Redial project that connects ITP experts on a variety of topics with students in need of some quick assistance.</p> 
-	<p>Whenever the floor is open, just pick up the black phone located in the hallway heading towards the Shop and automatically get connected to someone who can help with questions related to Physical Computing, Processing, HTML/CSS, Python or Thesis.</p>
-	<p>Experts will have up to two minutes to answer questions and direct the caller to other resources to help solve their problem. After two minutes, the call will automatically disconnect, so think quick!</p>
-	<p>Want to help your fellow students/ To register as an expert, please fill out the below form indicating the phone number where you would like to be called as well as the days and time window when are available to receive calls.</p>
+<p>que? is an awesome Redial project that connects ITP experts on a variety of topics with students in need of some quick assistance.</p> 
+<p>Whenever the floor is open, just pick up the black phone located in the hallway heading towards the Shop and automatically get connected to someone who can help with questions related to Physical Computing, Processing, HTML/CSS, Python or Thesis.</p>
+<p>Experts will have up to two minutes to answer questions and direct the caller to other resources to help solve their problem. After two minutes, the call will automatically disconnect, so think quick!</p>
+<p>Want to help your fellow students/ To register as an expert, please fill out the below form indicating the phone number where you would like to be called as well as the days and time window when are available to receive calls.</p>
+
+<hr/>
 			 
-<label>First Name: </label><input type="text" name="first_name" maxlength="255" size="8" value="" /><br/>
+<label>First Name</label>
+<input type="text" name="first_name" maxlength="255" size="8" value="" />
 
-<label>Last Name:  </label><input type="text" name="last_name" maxlength="255" size="14" value="" /><br/>
+<label>Last Name</label>
+<input type="text" name="last_name" maxlength="255" size="14" value="" /><br/>
 
-<label>Phone Number: <em>(e.g. 2125551212)</em></label><input type="text" name="phone_number" size="12" maxlength="10" value="" /><br/>
+<label>Phone Number <em>(e.g. 2125551212)</em></label>
+<input type="text" name="phone_number" size="12" maxlength="10" value="" /><br/>
 
-<h2>AREA OF EXPERTISE:</h2>
-<input type="checkbox" name="specialties[]" value="1" /> Physical Computing<br/>
-<input type="checkbox" name="specialties[]" value="2" /> Processing<br/>
-<input type="checkbox" name="specialties[]" value="3" /> HTML/CSS<br/>
-<input type="checkbox" name="specialties[]" value="4" /> Python<br/>
-<input type="checkbox" name="specialties[]" value="5" /> Thesis<br/>
+<h2>Area of Expertise</h2>
+<div id="specialties">
+<?php $result = mysql_query('SELECT * FROM specialties', $connect); ?>
+<?php while ($row = mysql_fetch_assoc($result)): ?>
+	<label><input type="checkbox" name="specialties[]" value="<?= $row['id'] ?>" /> <?= $row['name'] ?></label>
+<?php endwhile; ?>
+</div>
 
-<p></p>
-
-<h2>AVAILABILITY:</h2>
+<h2>Availability</h2>
 <p><em>Please check all that apply</em></p>
-
+<div id="availability">
 <?php for ($day = 1; $day <= 7; $day++): ?>
-	<input type="checkbox" name="availability[<?= $day ?>][checked]" value="1" /> <?= $days[$day] ?> from
+	<span class="item">
+	<label><input type="checkbox" name="availability[<?= $day ?>][checked]" value="1" /> <?= $days[$day] ?></label>
+	from
 	<select name="availability[<?= $day ?>][from]">
 		<option value="00:00:00">12:00 AM</option>
 		<option value="01:00:00">1:00 AM</option>
@@ -165,7 +169,8 @@ header('location: http://itp.nyu.edu/~au319/redial/thankyou.php');
 		<option value="21:00:00">9:00 PM</option>
 		<option value="22:00:00">10:00 PM</option>
 		<option value="23:00:00">11:00 PM</option>
-	</select> until
+	</select>
+	until
 	<select name="availability[<?= $day ?>][through]">
 		<option value="00:00:00">12:00 AM</option>
 		<option value="01:00:00">1:00 AM</option>
@@ -192,10 +197,11 @@ header('location: http://itp.nyu.edu/~au319/redial/thankyou.php');
 		<option value="22:00:00">10:00 PM</option>
 		<option value="23:00:00">11:00 PM</option>
 	</select>
-	<br/>
+	</span>
 <?php endfor; ?>
+</div>
 
-<p><input type="submit"  value="Go" /></p>
+<p><input type="submit" value="Sign Up" /></p>
 </form>
 
 </body>

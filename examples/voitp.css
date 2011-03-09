@@ -1,0 +1,31 @@
+body {
+	width: 500px;
+	margin: 20px auto;
+	font-family: helvetica,sans-serif;
+	font-size: 0.9em;
+	line-height: 1.3em;
+	}
+h1 {
+	text-indent: -9999px;
+	background-image: url('./que.png');
+	background-repeat: no-repeat;
+	width: 380px;
+	height: 271px;
+	margin: 0 0 -70px -135px;
+	}
+
+hr {
+	margin: 30px 0;
+	border: 1px solid #000;
+	}
+
+#specialties {position: relative;}
+#specialties:after {content: "."; display: block; height: 0; clear: both; visibility: hidden;}
+#specialties label {
+	width: 33%;
+	float: left;
+	}
+
+#availability .item {
+	display: block;
+	}
