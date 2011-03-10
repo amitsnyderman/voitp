@@ -50,7 +50,7 @@ CREATE TABLE `experts_specialties` (
 CREATE TABLE `calls` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `expert_id` int(11) NOT NULL,
-  `phone_number` int(10) NOT NULL,
+  `phone_number` varchar(10) NOT NULL,
   `call_duration` int(11) DEFAULT NULL,
   `created_on` datetime NOT NULL,
   PRIMARY KEY (`id`),
